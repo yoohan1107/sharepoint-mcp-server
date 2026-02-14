@@ -1,0 +1,143 @@
+{
+  "version": "2.0",
+  "lastUpdated": "2026-02-14T05:04:41.234Z",
+  "activeFeatures": [
+    "sharepoint-mcp-server",
+    "middleware",
+    "tools"
+  ],
+  "primaryFeature": "sharepoint-mcp-server",
+  "features": {
+    "sharepoint-mcp-server": {
+      "phase": "do",
+      "status": "in_progress",
+      "startedAt": "2026-02-14T13:20:00.000Z",
+      "planDocument": "docs/01-plan/features/sharepoint-mcp-server.plan.md",
+      "designDocument": "docs/02-design/features/sharepoint-mcp-server.design.md",
+      "taskId": "2",
+      "level": "Dynamic",
+      "type": "Core Infrastructure",
+      "priority": "P0",
+      "phaseNumber": 3,
+      "lastFile": "C:\\Users\\yooha\\Documents\\GitHub\\sharepoint-mcp-server\\src\\types\\env.ts",
+      "timestamps": {
+        "lastUpdated": "2026-02-14T05:04:41.234Z"
+      }
+    },
+    "middleware": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-02-14T04:54:47.226Z",
+        "lastUpdated": "2026-02-14T04:54:47.226Z"
+      },
+      "lastFile": "C:\\Users\\yooha\\Documents\\GitHub\\sharepoint-mcp-server\\src\\middleware\\auth.ts"
+    },
+    "tools": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-02-14T04:57:37.618Z",
+        "lastUpdated": "2026-02-14T04:57:58.146Z"
+      },
+      "lastFile": "C:\\Users\\yooha\\Documents\\GitHub\\sharepoint-mcp-server\\src\\tools\\lists.ts"
+    }
+  },
+  "pipeline": {
+    "currentPhase": 2,
+    "level": "Dynamic",
+    "phaseHistory": [
+      {
+        "phase": 1,
+        "completedAt": "2026-02-14T13:20:00.000Z"
+      }
+    ]
+  },
+  "session": {
+    "startedAt": "2026-02-14T04:14:46.371Z",
+    "onboardingCompleted": true,
+    "lastActivity": "2026-02-14T05:04:41.234Z"
+  },
+  "history": [
+    {
+      "timestamp": "2026-02-14T13:20:00.000Z",
+      "action": "plan_created",
+      "feature": "sharepoint-mcp-server",
+      "phase": "plan"
+    },
+    {
+      "timestamp": "2026-02-14T13:25:00.000Z",
+      "action": "design_created",
+      "feature": "sharepoint-mcp-server",
+      "phase": "design"
+    },
+    {
+      "timestamp": "2026-02-14T04:54:20.520Z",
+      "feature": "sharepoint-mcp-server",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-14T04:54:37.117Z",
+      "feature": "sharepoint-mcp-server",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-14T04:54:47.226Z",
+      "feature": "middleware",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-14T04:54:59.609Z",
+      "feature": "sharepoint-mcp-server",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-14T04:55:23.596Z",
+      "feature": "sharepoint-mcp-server",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-14T04:57:37.618Z",
+      "feature": "tools",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-14T04:57:58.146Z",
+      "feature": "tools",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-14T04:58:26.142Z",
+      "feature": "sharepoint-mcp-server",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-14T04:58:41.715Z",
+      "feature": "sharepoint-mcp-server",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-14T05:04:41.234Z",
+      "feature": "sharepoint-mcp-server",
+      "phase": "do",
+      "action": "updated"
+    }
+  ]
+}
