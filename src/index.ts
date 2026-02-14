@@ -1,7 +1,7 @@
 // Cloudflare Worker entry point for SharePoint MCP Server
 
-import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { createMCPServer } from "./server";
+import { WorkerTransport } from "./transport";
 import { validateAPIKey } from "./middleware/auth";
 import { Env } from "./types/env";
 
@@ -49,10 +49,8 @@ export default {
       // Create MCP server instance
       const server = createMCPServer(env);
 
-      // Create Streamable HTTP transport
-      const transport = new StreamableHTTPServerTransport({
-        endpoint: "/mcp",
-      });
+      // Create Workers-compatible transport
+      const transport = new WorkerTransport();
 
       // Connect server to transport
       await server.connect(transport);
@@ -68,7 +66,6 @@ export default {
 
       return new Response(mcpResponse.body, {
         status: mcpResponse.status,
-        statusText: mcpResponse.statusText,
         headers,
       });
     } catch (error) {
