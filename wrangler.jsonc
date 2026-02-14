@@ -1,7 +1,8 @@
 {
   "name": "sharepoint-mcp-server",
   "main": "src/index.ts",
-  "compatibility_date": "2024-01-01",
+  "compatibility_date": "2025-01-01",
+  "compatibility_flags": ["nodejs_compat"],
 
   // KV Namespace binding for Graph API token cache
   // Will be added via Dashboard after first deployment

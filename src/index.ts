@@ -1,6 +1,6 @@
 // Cloudflare Worker entry point for SharePoint MCP Server
 
-import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamable.js";
+import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { createMCPServer } from "./server";
 import { validateAPIKey } from "./middleware/auth";
 import { Env } from "./types/env";
