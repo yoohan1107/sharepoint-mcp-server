@@ -9,11 +9,46 @@ import {
   GetFileContentOutput,
   ListFilesInput,
   ListFilesOutput,
+  GetSiteInfoInput,
+  GetSiteInfoOutput,
   DocumentMetadata,
   FileSystemItem,
   GraphDriveItem,
   GraphSearchResponse,
+  GraphSiteResponse,
 } from "../types/models";
+
+/**
+ * Tool: get_site_info
+ * Get SharePoint site information including name, description, and URL
+ */
+export async function handleGetSiteInfo(
+  env: Env,
+  args: GetSiteInfoInput
+): Promise<any> {
+  const client = new GraphClient(env);
+  const siteUrl = args.site_url || env.SHAREPOINT_SITE_URL;
+
+  const url = new URL(siteUrl);
+  const endpoint = `/sites/${url.hostname}:${url.pathname}`;
+
+  const site = await client.get<GraphSiteResponse>(endpoint);
+
+  const result: GetSiteInfoOutput = {
+    success: true,
+    id: site.id,
+    name: site.name,
+    display_name: site.displayName,
+    description: site.description || "",
+    web_url: site.webUrl,
+    created_datetime: site.createdDateTime,
+    last_modified_datetime: site.lastModifiedDateTime,
+  };
+
+  return {
+    content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+  };
+}
 
 /**
  * Tool: search_documents

@@ -9,6 +9,7 @@ import { Env } from "./types/env";
 
 // Import tool handlers
 import {
+  handleGetSiteInfo,
   handleSearchDocuments,
   handleGetFileContent,
   handleListFiles,
@@ -40,6 +41,25 @@ export function createMCPServer(env: Env): Server {
   server.setRequestHandler(ListToolsRequestSchema, async () => {
     return {
       tools: [
+        // ============================================================
+        // Site Info Tool
+        // ============================================================
+        {
+          name: "get_site_info",
+          description:
+            "Get SharePoint site information including site name, description, and URL",
+          inputSchema: {
+            type: "object",
+            properties: {
+              site_url: {
+                type: "string",
+                description: "SharePoint site URL (defaults to configured site)",
+              },
+            },
+            required: [],
+          },
+        },
+
         // ============================================================
         // Document Tools
         // ============================================================
@@ -224,6 +244,10 @@ export function createMCPServer(env: Env): Server {
 
     try {
       switch (name) {
+        // Site info
+        case "get_site_info":
+          return await handleGetSiteInfo(env, args as any);
+
         // Document tools
         case "search_documents":
           return await handleSearchDocuments(env, args as any);

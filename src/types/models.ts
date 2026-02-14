@@ -46,6 +46,22 @@ export interface ListFilesOutput {
   count: number;
 }
 
+// Site Info Tool
+export interface GetSiteInfoInput {
+  site_url?: string;
+}
+
+export interface GetSiteInfoOutput {
+  success: boolean;
+  id: string;
+  name: string;
+  display_name: string;
+  description: string;
+  web_url: string;
+  created_datetime: string;
+  last_modified_datetime: string;
+}
+
 // SharePoint List Tools
 export interface GetListItemsInput {
   list_name: string;
@@ -175,6 +191,16 @@ export interface GraphListResponse {
   value: GraphListItem[];
   "@odata.count"?: number;
   "@odata.nextLink"?: string;
+}
+
+export interface GraphSiteResponse {
+  id: string;
+  name: string;
+  displayName: string;
+  description: string;
+  webUrl: string;
+  createdDateTime: string;
+  lastModifiedDateTime: string;
 }
 
 // ============================================================================

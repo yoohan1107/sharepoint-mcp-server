@@ -33,7 +33,10 @@ sharepoint-mcp-server/
 └── tsconfig.json
 ```
 
-### MCP Tools to Implement
+### MCP Tools (Implemented)
+
+**Site Tool:**
+- `get_site_info` - Get SharePoint site information (name, description, URL)
 
 **Document/File Tools:**
 - `search_documents` - Search SharePoint documents by keyword
@@ -91,7 +94,7 @@ npm install
 # Local development (with bindings)
 npx wrangler dev
 
-# Deploy to production
+# Deploy to production (수동 - 보통 불필요)
 npx wrangler deploy
 
 # Tail logs
@@ -107,6 +110,14 @@ npx wrangler secret put SHAREPOINT_SITE_URL
 # Create KV namespace
 npx wrangler kv:namespace create "AUTH_TOKENS"
 ```
+
+### CI/CD (자동 배포)
+
+**GitHub Actions로 자동 배포가 설정되어 있다** (`.github/workflows/deploy.yml`):
+- `main` 브랜치에 push하면 자동으로 Cloudflare Workers에 배포됨
+- 수동 `npx wrangler deploy`는 불필요 — **git commit & push만 하면 된다**
+- 필요 시크릿: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` (GitHub Secrets에 설정됨)
+- `workflow_dispatch`로 수동 트리거도 가능
 
 ### Testing
 
