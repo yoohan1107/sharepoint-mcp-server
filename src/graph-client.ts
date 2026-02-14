@@ -169,7 +169,9 @@ export const GRAPH_ENDPOINTS = {
     `/sites/${siteId}/drive/items/${itemId}/content`,
 
   LIST_FILES: (siteId: string, path: string) =>
-    `/sites/${siteId}/drive/root:${path}:/children`,
+    path === "/" || path === ""
+      ? `/sites/${siteId}/drive/root/children`
+      : `/sites/${siteId}/drive/root:${path}:/children`,
 
   // Lists
   GET_LIST_ITEMS: (siteId: string, listId: string) =>
