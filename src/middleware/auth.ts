@@ -23,6 +23,8 @@ export async function validateAPIKey(
     return false;
   }
 
+  console.log(`Auth debug: token length=${token.length}, env key exists=${!!env.MCP_API_KEY}, env key length=${env.MCP_API_KEY?.length ?? 'undefined'}`);
+
   // Constant-time comparison
   return safeCompare(token, env.MCP_API_KEY);
 }
