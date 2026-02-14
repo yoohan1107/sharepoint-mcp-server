@@ -35,12 +35,13 @@ export async function handleSearchDocuments(
   // Build endpoint
   let endpoint = GRAPH_ENDPOINTS.SEARCH_DOCUMENTS(siteId, args.query);
 
-  // Add file type filter if specified
+  // Add query parameters
+  const queryParams: string[] = [];
   if (args.file_type) {
-    endpoint += `&$filter=endswith(name,'${args.file_type}')`;
+    queryParams.push(`$filter=endswith(name,'${args.file_type}')`);
   }
-
-  endpoint += `&$top=${maxResults}`;
+  queryParams.push(`$top=${maxResults}`);
+  endpoint += `?${queryParams.join("&")}`;
 
   // Execute search
   const response = await client.get<GraphSearchResponse>(endpoint);
