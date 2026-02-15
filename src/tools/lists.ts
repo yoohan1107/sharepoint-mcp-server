@@ -3,6 +3,12 @@
 import { Env } from "../types/env";
 import { GraphClient, getSiteIdFromUrl, GRAPH_ENDPOINTS } from "../graph-client";
 import {
+  ListListsInput,
+  ListListsOutput,
+  GetListColumnsInput,
+  GetListColumnsOutput,
+  GetListItemInput,
+  GetListItemOutput,
   GetListItemsInput,
   GetListItemsOutput,
   CreateListItemInput,
@@ -14,7 +20,178 @@ import {
   ListItem,
   GraphListItem,
   GraphListResponse,
+  GraphSiteListResponse,
+  GraphColumnResponse,
+  GraphColumnDefinition,
 } from "../types/models";
+
+const COLUMN_TYPE_KEYS = [
+  "text",
+  "number",
+  "choice",
+  "dateTime",
+  "boolean",
+  "currency",
+  "lookup",
+  "personOrGroup",
+  "hyperlinkOrPicture",
+  "calculated",
+] as const;
+
+function getDisplayName(actor?: { user?: { displayName?: string } }): string {
+  return actor?.user?.displayName || "Unknown";
+}
+
+function getColumnType(column: GraphColumnDefinition): string {
+  for (const key of COLUMN_TYPE_KEYS) {
+    if (column[key]) {
+      return key;
+    }
+  }
+
+  return "unknown";
+}
+
+/**
+ * Tool: list_lists
+ * List available SharePoint lists and libraries in a site
+ */
+export async function handleListLists(
+  env: Env,
+  args: ListListsInput
+): Promise<any> {
+  const client = new GraphClient(env);
+  const siteId = args.site_id || (await getSiteIdFromUrl(client, env.SHAREPOINT_SITE_URL));
+  const top = Math.min(args.top || 100, 200);
+  const includeHidden = args.include_hidden || false;
+
+  const params = new URLSearchParams();
+  params.set(
+    "$select",
+    "id,name,displayName,description,webUrl,createdDateTime,lastModifiedDateTime,list"
+  );
+  params.set("$top", String(top));
+
+  const endpoint = `${GRAPH_ENDPOINTS.LIST_LISTS(siteId)}?${params}`;
+  const response = await client.get<GraphSiteListResponse>(endpoint);
+
+  const lists = response.value
+    .map((list) => ({
+      id: list.id,
+      name: list.name,
+      display_name: list.displayName,
+      description: list.description || "",
+      web_url: list.webUrl,
+      template: list.list?.template || "unknown",
+      is_hidden: list.list?.hidden || false,
+      created_datetime: list.createdDateTime,
+      last_modified_datetime: list.lastModifiedDateTime,
+    }))
+    .filter((list) => includeHidden || !list.is_hidden);
+
+  const result: ListListsOutput = {
+    success: true,
+    lists,
+    count: lists.length,
+    has_more: !!response["@odata.nextLink"],
+  };
+
+  return {
+    content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+  };
+}
+
+/**
+ * Tool: get_list_columns
+ * List columns (schema) for a SharePoint list
+ */
+export async function handleGetListColumns(
+  env: Env,
+  args: GetListColumnsInput
+): Promise<any> {
+  if (!args.list_name) {
+    throw new Error("list_name is required");
+  }
+
+  const client = new GraphClient(env);
+  const siteId = args.site_id || (await getSiteIdFromUrl(client, env.SHAREPOINT_SITE_URL));
+  const top = Math.min(args.top || 200, 500);
+
+  const params = new URLSearchParams();
+  params.set(
+    "$select",
+    "id,name,displayName,description,required,readOnly,hidden,columnGroup,text,number,choice,dateTime,boolean,currency,lookup,personOrGroup,hyperlinkOrPicture,calculated"
+  );
+  params.set("$top", String(top));
+
+  const endpoint = `${GRAPH_ENDPOINTS.GET_LIST_COLUMNS(siteId, args.list_name)}?${params}`;
+  const response = await client.get<GraphColumnResponse>(endpoint);
+
+  const columns = response.value.map((column) => ({
+    id: column.id,
+    name: column.name,
+    display_name: column.displayName,
+    description: column.description || "",
+    type: getColumnType(column),
+    required: !!column.required,
+    read_only: !!column.readOnly,
+    hidden: !!column.hidden,
+    column_group: column.columnGroup || "",
+  }));
+
+  const result: GetListColumnsOutput = {
+    success: true,
+    list_name: args.list_name,
+    columns,
+    count: columns.length,
+    has_more: !!response["@odata.nextLink"],
+  };
+
+  return {
+    content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+  };
+}
+
+/**
+ * Tool: get_list_item
+ * Get a single SharePoint list item by item ID
+ */
+export async function handleGetListItem(
+  env: Env,
+  args: GetListItemInput
+): Promise<any> {
+  if (!args.list_name || !args.item_id) {
+    throw new Error("list_name and item_id are required");
+  }
+
+  const client = new GraphClient(env);
+  const siteId = args.site_id || (await getSiteIdFromUrl(client, env.SHAREPOINT_SITE_URL));
+
+  const params = new URLSearchParams();
+  params.set("$expand", "fields");
+
+  const endpoint = `${GRAPH_ENDPOINTS.GET_LIST_ITEM(siteId, args.list_name, args.item_id)}?${params}`;
+  const response = await client.get<GraphListItem>(endpoint);
+
+  const item: ListItem = {
+    id: response.id,
+    fields: response.fields,
+    created_datetime: response.createdDateTime,
+    last_modified_datetime: response.lastModifiedDateTime,
+    created_by: getDisplayName(response.createdBy),
+    modified_by: getDisplayName(response.lastModifiedBy),
+  };
+
+  const result: GetListItemOutput = {
+    success: true,
+    list_name: args.list_name,
+    item,
+  };
+
+  return {
+    content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+  };
+}
 
 /**
  * Tool: get_list_items
@@ -53,8 +230,8 @@ export async function handleGetListItems(
     fields: item.fields,
     created_datetime: item.createdDateTime,
     last_modified_datetime: item.lastModifiedDateTime,
-    created_by: item.createdBy.user.displayName,
-    modified_by: item.lastModifiedBy.user.displayName,
+    created_by: getDisplayName(item.createdBy),
+    modified_by: getDisplayName(item.lastModifiedBy),
   }));
 
   const result: GetListItemsOutput = {

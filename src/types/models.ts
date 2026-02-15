@@ -63,6 +63,69 @@ export interface GetSiteInfoOutput {
 }
 
 // SharePoint List Tools
+export interface ListListsInput {
+  site_id?: string;
+  include_hidden?: boolean;
+  top?: number;
+}
+
+export interface SharePointListMetadata {
+  id: string;
+  name: string;
+  display_name: string;
+  description: string;
+  web_url: string;
+  template: string;
+  is_hidden: boolean;
+  created_datetime: string;
+  last_modified_datetime: string;
+}
+
+export interface ListListsOutput {
+  success: boolean;
+  lists: SharePointListMetadata[];
+  count: number;
+  has_more: boolean;
+}
+
+export interface GetListColumnsInput {
+  list_name: string;
+  site_id?: string;
+  top?: number;
+}
+
+export interface ListColumnMetadata {
+  id: string;
+  name: string;
+  display_name: string;
+  description: string;
+  type: string;
+  required: boolean;
+  read_only: boolean;
+  hidden: boolean;
+  column_group: string;
+}
+
+export interface GetListColumnsOutput {
+  success: boolean;
+  list_name: string;
+  columns: ListColumnMetadata[];
+  count: number;
+  has_more: boolean;
+}
+
+export interface GetListItemInput {
+  list_name: string;
+  item_id: string;
+  site_id?: string;
+}
+
+export interface GetListItemOutput {
+  success: boolean;
+  list_name: string;
+  item: ListItem;
+}
+
 export interface GetListItemsInput {
   list_name: string;
   site_id?: string;
@@ -179,6 +242,54 @@ export interface GraphListItem {
   lastModifiedDateTime: string;
   createdBy: { user: { displayName: string } };
   lastModifiedBy: { user: { displayName: string } };
+}
+
+export interface GraphListInfo {
+  template?: string;
+  hidden?: boolean;
+  contentTypesEnabled?: boolean;
+}
+
+export interface GraphSiteList {
+  id: string;
+  name: string;
+  displayName: string;
+  description?: string;
+  webUrl: string;
+  createdDateTime: string;
+  lastModifiedDateTime: string;
+  list?: GraphListInfo;
+}
+
+export interface GraphSiteListResponse {
+  value: GraphSiteList[];
+  "@odata.nextLink"?: string;
+}
+
+export interface GraphColumnDefinition {
+  id: string;
+  name: string;
+  displayName: string;
+  description?: string;
+  required?: boolean;
+  readOnly?: boolean;
+  hidden?: boolean;
+  columnGroup?: string;
+  text?: Record<string, unknown>;
+  number?: Record<string, unknown>;
+  choice?: Record<string, unknown>;
+  dateTime?: Record<string, unknown>;
+  boolean?: Record<string, unknown>;
+  currency?: Record<string, unknown>;
+  lookup?: Record<string, unknown>;
+  personOrGroup?: Record<string, unknown>;
+  hyperlinkOrPicture?: Record<string, unknown>;
+  calculated?: Record<string, unknown>;
+}
+
+export interface GraphColumnResponse {
+  value: GraphColumnDefinition[];
+  "@odata.nextLink"?: string;
 }
 
 export interface GraphSearchResponse {

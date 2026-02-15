@@ -91,10 +91,13 @@ This project uses GitHub Actions for automatic deployment to Cloudflare Workers.
 
 ### SharePoint List Tools
 
-4. **get_list_items**: Query list items with OData filters
-5. **create_list_item**: Create new list item
-6. **update_list_item**: Update existing list item
-7. **delete_list_item**: Delete list item
+4. **list_lists**: List available SharePoint lists and libraries
+5. **get_list_columns**: Get list column schema and field metadata
+6. **get_list_item**: Get a single list item by ID
+7. **get_list_items**: Query list items with OData filters
+8. **create_list_item**: Create new list item
+9. **update_list_item**: Update existing list item
+10. **delete_list_item**: Delete list item
 
 ## Usage with Claude Desktop
 
@@ -116,6 +119,7 @@ Add to your Claude Desktop MCP settings:
 Then you can ask Claude:
 - "Search for budget documents in SharePoint"
 - "Show me the content of file ID abc123"
+- "Show all lists and libraries in this site"
 - "List items in the Tasks list where Status is Active"
 
 ## Development

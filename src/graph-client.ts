@@ -177,6 +177,15 @@ export const GRAPH_ENDPOINTS = {
   GET_LIST_ITEMS: (siteId: string, listId: string) =>
     `/sites/${siteId}/lists/${listId}/items`,
 
+  LIST_LISTS: (siteId: string) =>
+    `/sites/${siteId}/lists`,
+
+  GET_LIST_COLUMNS: (siteId: string, listId: string) =>
+    `/sites/${siteId}/lists/${listId}/columns`,
+
+  GET_LIST_ITEM: (siteId: string, listId: string, itemId: string) =>
+    `/sites/${siteId}/lists/${listId}/items/${itemId}`,
+
   CREATE_LIST_ITEM: (siteId: string, listId: string) =>
     `/sites/${siteId}/lists/${listId}/items`,
 

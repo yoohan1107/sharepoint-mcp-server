@@ -15,6 +15,9 @@ import {
   handleListFiles,
 } from "./tools/documents";
 import {
+  handleListLists,
+  handleGetListColumns,
+  handleGetListItem,
   handleGetListItems,
   handleCreateListItem,
   handleUpdateListItem,
@@ -132,6 +135,74 @@ export function createMCPServer(env: Env): Server {
         // ============================================================
         // SharePoint List Tools
         // ============================================================
+        {
+          name: "list_lists",
+          description:
+            "List available SharePoint lists and document libraries in a site",
+          inputSchema: {
+            type: "object",
+            properties: {
+              site_id: {
+                type: "string",
+                description: "Optional SharePoint site ID (defaults to configured site)",
+              },
+              include_hidden: {
+                type: "boolean",
+                description: "Include hidden/system lists (default: false)",
+              },
+              top: {
+                type: "number",
+                description: "Maximum number of lists to return (default 100, max 200)",
+              },
+            },
+            required: [],
+          },
+        },
+        {
+          name: "get_list_columns",
+          description:
+            "List columns and field schema for a SharePoint list",
+          inputSchema: {
+            type: "object",
+            properties: {
+              list_name: {
+                type: "string",
+                description: "List name or ID",
+              },
+              site_id: {
+                type: "string",
+                description: "Optional SharePoint site ID (defaults to configured site)",
+              },
+              top: {
+                type: "number",
+                description: "Maximum number of columns to return (default 200, max 500)",
+              },
+            },
+            required: ["list_name"],
+          },
+        },
+        {
+          name: "get_list_item",
+          description: "Get a single SharePoint list item by item ID",
+          inputSchema: {
+            type: "object",
+            properties: {
+              list_name: {
+                type: "string",
+                description: "List name or ID",
+              },
+              item_id: {
+                type: "string",
+                description: "Item ID to retrieve",
+              },
+              site_id: {
+                type: "string",
+                description: "Optional SharePoint site ID (defaults to configured site)",
+              },
+            },
+            required: ["list_name", "item_id"],
+          },
+        },
         {
           name: "get_list_items",
           description:
@@ -259,6 +330,15 @@ export function createMCPServer(env: Env): Server {
           return await handleListFiles(env, args as any);
 
         // List tools
+        case "list_lists":
+          return await handleListLists(env, args as any);
+
+        case "get_list_columns":
+          return await handleGetListColumns(env, args as any);
+
+        case "get_list_item":
+          return await handleGetListItem(env, args as any);
+
         case "get_list_items":
           return await handleGetListItems(env, args as any);
 
